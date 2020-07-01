@@ -1,4 +1,4 @@
-#include "hector_moveit_navigation/hector_navigation.h"
+#include "hector_navigation/hector_navigation.h"
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "hector_navigation");

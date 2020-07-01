@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(hector_moveit_navigation)
+project(hector_navigation)
 
 add_compile_options(-std=c++11)
 
@@ -104,7 +104,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
  INCLUDE_DIRS include
-#  LIBRARIES hector_moveit_navigation
+#  LIBRARIES hector_navigation
 #  CATKIN_DEPENDS hector_moveit_actions hector_navigation_msgs hector_uav_msgs moveit_core moveit_msgs moveit_ros_planning_interface roscpp std_msgs
 #  DEPENDS system_lib
 )
@@ -134,7 +134,7 @@ add_library(${PROJECT_NAME}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/hector_moveit_navigation_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/hector_navigation_node.cpp)
 
 
 add_executable(hector_navigation_node node/hector_navigation_node.cpp)
@@ -203,7 +203,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_hector_moveit_navigation.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_hector_navigation.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

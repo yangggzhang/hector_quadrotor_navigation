@@ -1,4 +1,4 @@
-#include "hector_moveit_navigation/hector_navigation.h"
+#include "hector_navigation/hector_navigation.h"
 
 #include <boost/optional.hpp>
 

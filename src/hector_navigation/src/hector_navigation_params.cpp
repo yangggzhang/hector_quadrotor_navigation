@@ -1,4 +1,4 @@
-#include "hector_moveit_navigation/hector_navigation_params.h"
+#include "hector_navigation/hector_navigation_params.h"
 
 namespace hector {
 namespace navigation {
