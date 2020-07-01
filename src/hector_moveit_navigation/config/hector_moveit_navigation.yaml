@@ -1,0 +1,6 @@
+update_rate_hz: 10
+takeoff_distance_m: 0.5
+move_group: "DroneBody"
+planner_id: "RRTConnectkConfigDefault"
+workspace_lowerbound_m: [-20.0, -20.0, 0.05]
+workspace_upperbound_m: [20.0, 20.0, 5.0]

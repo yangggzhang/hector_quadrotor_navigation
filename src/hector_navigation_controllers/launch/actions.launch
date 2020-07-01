@@ -1,0 +1,4 @@
+<launch>
+  <node name="hector_waypoint_action" pkg="hector_navigation_controllers" type="waypoint_action" output="screen" />
+  <node name="hector_followtrajectory_action" pkg="hector_navigation_controllers" type="followtrajectory_action" output="screen" />
+</launch>

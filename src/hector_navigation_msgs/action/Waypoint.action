@@ -1,0 +1,5 @@
+# Pose command
+hector_navigation_msgs/Waypoint target_waypoint
+---
+---
+geometry_msgs/PoseStamped current_pose

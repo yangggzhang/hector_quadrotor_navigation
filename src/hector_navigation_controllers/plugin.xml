@@ -1,0 +1,10 @@
+<class_libraries>
+  <library path="lib/libhector_navigation_controllers">
+    <class name="hector_navigation_controllers/WaypointController" type="hector_navigation_controllers::WaypointController"
+           base_class_type="controller_interface::ControllerBase">
+      <description>
+        TODO
+      </description>
+    </class>
+  </library>
+</class_libraries>

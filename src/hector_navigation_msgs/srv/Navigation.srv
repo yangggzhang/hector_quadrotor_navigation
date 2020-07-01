@@ -1,0 +1,9 @@
+geometry_msgs/Pose goal # e.g. Navigation goal pose for hector quadrotor
+---
+int8 return_type    # indicate the return status of the navigation task
+                    # 0 Navigation succeeded.
+                    # 1 Navigation failed at planning.
+                    # 2 Navigation failed at execution.
+                    # 3 Motor enable failed.
+                    # 4 Connection lost.
+                    # 5 Unknown error.

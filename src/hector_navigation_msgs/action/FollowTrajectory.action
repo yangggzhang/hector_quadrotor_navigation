@@ -1,0 +1,13 @@
+# Goal definition
+Header header 
+hector_navigation_msgs/Waypoint[] trajectory
+---
+# Result definition
+int32 result_code
+int32 SUCCESSFUL = 0
+int32 INVALID_GOAL = -1
+int32 PATH_TOLERANCE_VIOLATED = -2
+int32 COLLISION_IN_FRONT = 3
+---
+#Feedback definition
+geometry_msgs/PoseStamped current_pose

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="use_ground_truth_for_control" default="true"/>
+
+    <!-- Controllers for waypoint navigation -->
+    <remap from="pose" to="ground_truth_to_tf/pose"  if="$(arg use_ground_truth_for_control)" />
+
+    <!-- waypoint controllers -->
+    <include file="$(find hector_navigation_controllers)/launch/waypoint_controller.launch"/>
+
+    <!-- waypoint and trajectory actions -->
+    <include file="$(find hector_navigation_controllers)/launch/actions.launch" />
+
+    <node pkg="hector_moveit_navigation" type="hector_navigation_node" name="navigation_node" output="screen"> 
+        <rosparam command="load" file="$(find hector_moveit_navigation)/config/hector_moveit_navigation.yaml" />
+    </node>
+</launch>
+

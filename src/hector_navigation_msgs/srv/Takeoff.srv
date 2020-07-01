@@ -1,0 +1,3 @@
+float64 takeoff_distance_m # e.g. Takeoff vertical distance for hector quadrotor.
+---
+bool success

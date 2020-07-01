@@ -1,0 +1,19 @@
+waypoint:
+    type: hector_navigation_controllers/WaypointController
+    x: &pos_xy
+        p: 2.0
+        i: 0.0
+        d: 0.0
+    y: *pos_xy
+    z:
+        p: 2.0
+        i: 0.0
+        d: 0.0
+    yaw:
+        p: 2.0
+        i: 0.0
+        d: 0.0
+    speed:
+        p: 2.0
+        i: 0.0
+        d: 0.0      

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<launch>
+  <node name="gazebo_killer" pkg="hector_moveit_config" type="gazebo_killer.sh"/>
+  <arg name="use_ground_truth_for_tf" default="true"/>
+  <arg name="headless" default="true"/>
+  <arg name="use_gui" default="true"/>
+  <arg name="debug" default="true" />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="false" /> 
+    <arg name="paused" value="false"/>
+    <arg name="headless" value="$(arg headless)"/>
+    <arg name="gui" value="$(arg use_gui)"/>
+  </include>
+                
+    <include file="$(find hector_navigation_simulation)/launch/spawn_quadrotor_with_two_cams.launch">    
+      <arg name="use_ground_truth_for_tf" value="$(arg use_ground_truth_for_tf)" />
+      <arg name="x" value="20" />
+      <arg name="yaw" value="3.14"/>
+    </include>
+
+  <!-- The name of the parameter under which the URDF is loaded -->
+  <arg name="robot_description" default="robot_description"/>
+
+
+
+  <!-- We do not have a robot connected, so publish fake joint states -->
+  
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+  	<param name="use_gui" value="false"/>
+    <param name="publish_frequency" type="double" value="50.0" />
+    <rosparam param="source_list">[/move_group/fake_controller_joint_states]</rosparam>
+  </node>
+
+
+  
+  <include file="$(find hector_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="true"/>
+    <arg name="info" value="false"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+  <!-- Adjust grid size to have more granular exploration-->
+  <param name="grid_size" type="double" value="13"/> 
+  <!-- Visualisation RVIZ -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hector_moveit_config)/launch/moveit.rviz" output="screen"/>
+  
+</launch>
