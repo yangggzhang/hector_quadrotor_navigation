@@ -1,0 +1,3 @@
+[submodule "src/hector-moveit"]
+	path = src/hector-moveit
+	url = https://github.com/tahsinkose/hector-moveit.git
