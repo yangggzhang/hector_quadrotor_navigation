@@ -45,6 +45,6 @@
   <!-- Adjust grid size to have more granular exploration-->
   <param name="grid_size" type="double" value="13"/> 
   <!-- Visualisation RVIZ -->
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hector_moveit_config)/launch/moveit.rviz" output="screen"/>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hector_navigation_simulation)/config/navigation.rviz" output="screen"/>
   
 </launch>
