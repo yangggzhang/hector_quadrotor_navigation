@@ -1,4 +1,4 @@
-geometry_msgs/Pose goal # e.g. Navigation goal pose for hector quadrotor
+geometry_msgs/Point goal # e.g. Navigation goal pose for hector quadrotor
 float64 speed # target navigation speed in m/s
 ---
 int8 return_type    # indicate the return status of the navigation task

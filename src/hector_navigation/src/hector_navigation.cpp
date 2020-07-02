@@ -236,8 +236,19 @@ bool HectorQuadrotor::NavigationService(
     res.return_type = 3;
     return false;
   }
+
+  if (!current_pose_.is_initialized()) {
+    ROS_ERROR_STREAM("Hector failed to receive pose information!");
+    res.return_type = 4;
+    return false;
+  }
+
   HectorNavigationErrorCode code;
-  if (!Navigate(req.goal, req.speed, code)) {
+  geometry_msgs::Pose goal_pose;
+  goal_pose.position = req.goal;
+  goal_pose.orientation = current_pose_.get().orientation;
+
+  if (!Navigate(goal_pose, req.speed, code)) {
     switch (code) {
       case PlanFailure: {
         res.return_type = 1;
