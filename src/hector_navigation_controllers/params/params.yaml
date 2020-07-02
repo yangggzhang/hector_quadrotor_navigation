@@ -3,9 +3,13 @@ action_timeout: 300.0
 state_timeout: 0.5
 command_timeout: 0.5
 
-dist_tolerance: 0.1
-yaw_tolerance: 0.35
-time_in_tolerance: 1.0
+waypoint_dist_tolerance: 1.20
+final_dist_tolerance: 0.05
+waypoint_yaw_tolerance: 1.55
+final_yaw_tolerance: 0.35
+waypoint_time_in_tolerance: 0.0
+final_time_in_tolerance: 1.0
+action_frequency: 25
 
 landing_height: 0.1
 takeoff_height: 0.1
