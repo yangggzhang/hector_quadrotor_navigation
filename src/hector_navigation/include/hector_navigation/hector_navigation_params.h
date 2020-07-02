@@ -26,7 +26,7 @@ const double KUpdateRate_hz = 10;
 
 const int KPlanningAttempt = 10;
 
-const double KNavigationSpeed_m_s = 2;
+const int KNumSlowDownPoints = 3;
 
 // Workspace in x, y and z direction.
 const std::vector<double> KWorkspaceLowerbound_m{-20.0, -20.0, 0.05};
@@ -71,7 +71,7 @@ class HectorNavigationParam {
 
   double takeoff_distance_m;
 
-  double navigation_speed_m_s;
+  int num_slowdown_waypoints;
 
   std::string move_group;
 

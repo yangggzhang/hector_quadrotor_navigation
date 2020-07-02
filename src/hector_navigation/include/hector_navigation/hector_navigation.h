@@ -37,8 +37,8 @@ class HectorQuadrotor {
 
   bool TakeOff(const double& takeoff_distance);
 
-  bool WaypointNavigate(geometry_msgs::Pose& goal,
-                        HectorNavigationErrorCode& error_code);
+  bool Navigate(geometry_msgs::Pose& goal, const double& speed,
+                HectorNavigationErrorCode& error_code);
 
   bool Run();
 
@@ -76,13 +76,12 @@ class HectorQuadrotor {
 
   inline std::vector<hector_navigation_msgs::Waypoint>
   MoveitRobotTrajectoryToWaypointTrajectory(
-      const moveit_msgs::RobotTrajectory& msg);
+      const moveit_msgs::RobotTrajectory& msg, const double& speed);
 
   HectorState state_;
 
-  bool WaypointNavigationService(
-      hector_navigation_msgs::Navigation::Request& req,
-      hector_navigation_msgs::Navigation::Response& res);
+  bool NavigationService(hector_navigation_msgs::Navigation::Request& req,
+                         hector_navigation_msgs::Navigation::Response& res);
 
   bool TakeoffService(hector_navigation_msgs::Takeoff::Request& req,
                       hector_navigation_msgs::Takeoff::Response& res);

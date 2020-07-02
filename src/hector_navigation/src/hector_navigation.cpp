@@ -21,9 +21,8 @@ HectorQuadrotor::HectorQuadrotor(
   enable_motor_service_ =
       nh.serviceClient<hector_uav_msgs::EnableMotors>("/enable_motors");
 
-  hector_navigation_server_ =
-      nh.advertiseService("hector_waypoint_navigation",
-                          &HectorQuadrotor::WaypointNavigationService, this);
+  hector_navigation_server_ = nh.advertiseService(
+      "hector_navigation", &HectorQuadrotor::NavigationService, this);
 
   hector_takeoff_server_ = nh.advertiseService(
       "hector_takeoff", &HectorQuadrotor::TakeoffService, this);
@@ -150,19 +149,25 @@ inline geometry_msgs::Pose HectorQuadrotor::TransformToPose(
 
 inline std::vector<hector_navigation_msgs::Waypoint>
 HectorQuadrotor::MoveitRobotTrajectoryToWaypointTrajectory(
-    const moveit_msgs::RobotTrajectory& msg) {
+    const moveit_msgs::RobotTrajectory& msg, const double& speed) {
   std::vector<hector_navigation_msgs::Waypoint> waypoint_trajectory;
   waypoint_trajectory.resize(msg.multi_dof_joint_trajectory.points.size());
   for (int i = 0; i < msg.multi_dof_joint_trajectory.points.size(); ++i) {
     waypoint_trajectory[i].pose =
         TransformToPose(msg.multi_dof_joint_trajectory.points[i].transforms[0]);
-    waypoint_trajectory[i].speed = params_.navigation_speed_m_s;
+    waypoint_trajectory[i].speed = speed;
+  }
+  const int slowdown_points =
+      std::min(params_.num_slowdown_waypoints, (int)waypoint_trajectory.size());
+  for (int i = 0; i < slowdown_points; ++i) {
+    waypoint_trajectory[waypoint_trajectory.size() - 1 - i].speed =
+        double(i) / double(slowdown_points) * speed;
   }
   return waypoint_trajectory;
 }
 
-bool HectorQuadrotor::WaypointNavigate(geometry_msgs::Pose& goal,
-                                       HectorNavigationErrorCode& error_code) {
+bool HectorQuadrotor::Navigate(geometry_msgs::Pose& goal, const double& speed,
+                               HectorNavigationErrorCode& error_code) {
   if (!current_pose_.is_initialized()) {
     ROS_ERROR(
         "Failed to get hector's current pose information to plan a "
@@ -194,7 +199,7 @@ bool HectorQuadrotor::WaypointNavigate(geometry_msgs::Pose& goal,
   hector_navigation_msgs::FollowTrajectoryGoal trajectory_goal;
   trajectory_goal.header.frame_id = "world";
   trajectory_goal.trajectory =
-      MoveitRobotTrajectoryToWaypointTrajectory(plan.trajectory_);
+      MoveitRobotTrajectoryToWaypointTrajectory(plan.trajectory_, speed);
   this->trajectory_controller_->sendGoal(trajectory_goal);
   if (!this->trajectory_controller_->waitForResult()) {
     ROS_ERROR_STREAM("Hector failed to reach goal : "
@@ -223,7 +228,7 @@ void HectorQuadrotor::update_pose_callback(
   current_pose_ = boost::make_optional(msg->pose.pose);
 }
 
-bool HectorQuadrotor::WaypointNavigationService(
+bool HectorQuadrotor::NavigationService(
     hector_navigation_msgs::Navigation::Request& req,
     hector_navigation_msgs::Navigation::Response& res) {
   if (state_ == IDLE && !EnableMotor()) {
@@ -232,7 +237,7 @@ bool HectorQuadrotor::WaypointNavigationService(
     return false;
   }
   HectorNavigationErrorCode code;
-  if (!WaypointNavigate(req.goal, code)) {
+  if (!Navigate(req.goal, req.speed, code)) {
     switch (code) {
       case PlanFailure: {
         res.return_type = 1;

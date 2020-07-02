@@ -7,6 +7,7 @@ HectorNavigationParam::HectorNavigationParam()
     : takeoff_distance_m(KTakeOffDistance_m),
       move_group(KMoveGroup),
       update_rate_hz(KUpdateRate_hz),
+      num_slowdown_waypoints(KNumSlowDownPoints),
       planning_attempt(KPlanningAttempt),
       workspace_lowerbound_m(KWorkspaceLowerbound_m),
       workspace_upperbound_m(KWorkspaceUpperbound_m),
@@ -18,9 +19,9 @@ bool HectorNavigationParam::LoadFromRosParams(ros::NodeHandle& ph) {
         "Using default take off height (m): " << KTakeOffDistance_m);
   }
 
-  if (!ph.getParam("navigation_speed_m_s", navigation_speed_m_s)) {
+  if (!ph.getParam("num_slowdown_waypoints", num_slowdown_waypoints)) {
     ROS_WARN_STREAM(
-        "Using default navigation speed (m/s): " << KNavigationSpeed_m_s);
+        "Using default number of slow down points: " << KNumSlowDownPoints);
   }
 
   if (!ph.getParam("move_group", move_group)) {
