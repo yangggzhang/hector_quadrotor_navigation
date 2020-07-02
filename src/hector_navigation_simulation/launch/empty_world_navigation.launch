@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
 <launch>
+  <remap from="/forward_camera/depth/points" to="/camera/depth/points"/>
+  <remap from="/downward_camera/depth/points" to="/camera/depth/points"/>
+  
   <node name="gazebo_killer" pkg="hector_moveit_config" type="gazebo_killer.sh"/>
   <arg name="use_ground_truth_for_tf" default="true"/>
   <arg name="headless" default="true"/>

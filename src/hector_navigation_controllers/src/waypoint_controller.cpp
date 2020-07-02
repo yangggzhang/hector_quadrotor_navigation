@@ -9,6 +9,7 @@
 #include <hector_quadrotor_interface/quadrotor_interface.h>
 #include <pluginlib/class_list_macros.h>
 #include <ros/subscriber.h>
+#include <std_msgs/Float64.h>
 #include <tf/transform_listener.h>  // for tf::getPrefixParam()
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <tf2/LinearMath/Quaternion.h>
@@ -69,6 +70,11 @@ class WaypointController
     initMarker(root_nh.getNamespace());
     marker_publisher_ =
         root_nh.advertise<visualization_msgs::Marker>("command/pose_marker", 1);
+
+    // twist_publisher_ =
+    //     root_nh.advertise<geometry_msgs::Twist>("output/twist", 1);
+
+    // speed_publisher_ = root_nh.advertise<std_msgs::Float64>("speed", 1);
 
     // Initialize inputs/outputs
     waypoint_input_ = interface->addInput<WaypointCommandHandle>("waypoint");
@@ -151,7 +157,7 @@ class WaypointController
     // Check if pose control was preempted
     if (twist_output_->preempted()) {
       if (pose_command_valid_) {
-        ROS_INFO_NAMED("position_controller", "Position control preempted!");
+        ROS_INFO_NAMED("waypoint_controller", "Waypoint control preempted!");
       }
       pose_command_valid_ = false;
     }
@@ -160,7 +166,7 @@ class WaypointController
     if (motor_status_->motorStatus().running == false) {
       if (pose_command_valid_) {
         ROS_INFO_NAMED(
-            "position_controller",
+            "waypoint_controller",
             "Disabled position control while motors are not running.");
       }
       pose_command_valid_ = false;
@@ -202,22 +208,29 @@ class WaypointController
       geometry_msgs::Twist current_twist = twist_->twist();
       double current_speed = GetSpeed(current_twist.linear);
 
-      const double speed_error = waypoint_command_.speed - current_speed;
-      const double speed_command =
-          pid_.speed.computeCommand(speed_error, period);
+      // std_msgs::Float64 speed_msg;
+      // speed_msg.data = current_speed;
+      // speed_publisher_.publish(speed_msg);
 
-      output.linear.x = output.linear.x * speed_command;
-      output.linear.y = output.linear.y * speed_command;
-      output.linear.z = output.linear.z * speed_command;
+      const double speed_error = waypoint_command_.speed - current_speed;
+      double speed_command = pid_.speed.computeCommand(speed_error, period);
+
+      speed_command = std::max(-1.0, speed_command);
+
+      output.linear.x = output.linear.x * (1.0 + speed_command);
+      output.linear.y = output.linear.y * (1.0 + speed_command);
+      output.linear.z = output.linear.z * (1.0 + speed_command);
     }
 
     double yaw_error = yaw_command - yaw;
+
     // detect wrap around pi and compensate
     if (yaw_error > M_PI) {
       yaw_error -= 2 * M_PI;
     } else if (yaw_error < -M_PI) {
       yaw_error += 2 * M_PI;
     }
+
     output.angular.z = pid_.yaw.computeCommand(yaw_error, period);
 
     // add twist command if available
@@ -259,6 +272,8 @@ class WaypointController
     }
 
     // set twist output
+    // geometry_msgs::Twist msg = output;
+    // twist_publisher_.publish(output);
     twist_output_->setCommand(output);
   }
 
@@ -320,6 +335,10 @@ class WaypointController
 
   ros::Subscriber pose_subscriber_, twist_limit_subscriber_;
   ros::Publisher marker_publisher_;
+
+  // ros::Publisher twist_publisher_;
+
+  // ros::Publisher speed_publisher_;
 
   visualization_msgs::Marker pose_marker_;
 
