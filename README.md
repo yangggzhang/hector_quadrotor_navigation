@@ -19,7 +19,7 @@ To launch the simulation environment :
 ```Shell
 roslaunch hector_navigation_simulation empty_world_navigation.launch
 ```
-The user can custom the simulation environment by providing gazebo world files.
+Users can custom the simulation environment by providing gazebo world files.
 
 To launch the navigation stack:
 ```Shell
@@ -27,6 +27,7 @@ roslaunch hector_navigation_simulation hector_navigation.launch
 ```
 
 This package currently provides two ros service:
+
 ## Takeoff service
 ```Shell
 rosservice call /hector_takeoff "takeoff_distance_m: Desired Takeoff distance"
@@ -41,7 +42,7 @@ rosservice call /hector_navigation "goal:
   z: 0.0
 speed: 0.0"
 ```
-The user is able to set the navigation goal position with a desired cruise speed.
+Users are able to set the navigation goal position with a desired cruise speed.
 
 # Acknowledge
 
