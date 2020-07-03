@@ -47,7 +47,7 @@ speed: 0.0"
 ```
 Users are able to set the navigation goal position with a desired cruise speed.
 
-## Acknowledge
+## Acknowledgement
 
 This project is developed heavily referring to Tahsincan Köse's [hector-moveit](https://github.com/tahsinkose/hector-moveit
 ) project.
