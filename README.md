@@ -2,7 +2,7 @@
 This project provides an implementation of 3D navigation for the hector quadrotor using the Moveit! Motion Planning Framework.
 
 ## Support
-This package is developed on Ubuntu 18.04 with (ROS melodic) [http://wiki.ros.org/Installation/Ubuntu]. The support for other versions of ROS is under further development.
+This package is developed on Ubuntu 18.04 with [ROS melodic] (http://wiki.ros.org/Installation/Ubuntu). The support for other versions of ROS is under further development.
 
 ## Getting Started
 To install the necessary packages:
