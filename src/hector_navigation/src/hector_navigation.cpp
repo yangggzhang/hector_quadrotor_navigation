@@ -15,11 +15,14 @@ HectorQuadrotor::HectorQuadrotor(
       agent_(std::move(agent)),
       trajectory_controller_(std::move(trajectory_controller)),
       waypoint_controller_(std::move(waypoint_controller)) {
+  const std::string ns = nh.getNamespace();
+
   pose_sub_ = nh.subscribe<nav_msgs::Odometry>(
-      "/ground_truth/state", 10, &HectorQuadrotor::update_pose_callback, this);
+      ns + "/ground_truth/state", 10, &HectorQuadrotor::update_pose_callback,
+      this);
 
   enable_motor_service_ =
-      nh.serviceClient<hector_uav_msgs::EnableMotors>("/enable_motors");
+      nh.serviceClient<hector_uav_msgs::EnableMotors>(ns + "/enable_motors");
 
   hector_navigation_server_ = nh.advertiseService(
       "hector_navigation", &HectorQuadrotor::NavigationService, this);
@@ -48,9 +51,11 @@ std::unique_ptr<HectorQuadrotor> HectorQuadrotor::MakeUniqueFromRosParam(
       params.workspace_lowerbound_m[2], params.workspace_upperbound_m[0],
       params.workspace_upperbound_m[1], params.workspace_upperbound_m[2]);
 
+  const std::string ns = nh.getNamespace();
+
   std::unique_ptr<NavigationController> navigation_controller =
       std::unique_ptr<NavigationController>(
-          new NavigationController("/action/followtrajectory", true));
+          new NavigationController(ns + "/action/followtrajectory", true));
   if (!navigation_controller->waitForServer(ros::Duration(30))) {
     ROS_ERROR_STREAM(
         "Failed to bring up hector navigation trajectory following "
@@ -62,7 +67,7 @@ std::unique_ptr<HectorQuadrotor> HectorQuadrotor::MakeUniqueFromRosParam(
 
   std::unique_ptr<WaypointController> waypoint_controller =
       std::unique_ptr<WaypointController>(
-          new WaypointController("action/waypoint", true));
+          new WaypointController(ns + "/action/waypoint", true));
   if (!waypoint_controller->waitForServer(ros::Duration(30))) {
     ROS_ERROR("Failed to bring up hector waypoint controller!");
     return nullptr;
