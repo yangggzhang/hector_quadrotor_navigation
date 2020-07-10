@@ -1,7 +1,6 @@
 #pragma once
 
 #include <geometry_msgs/Pose.h>
-#include <hector_moveit_actions/ExecuteDroneTrajectoryAction.h>
 #include <hector_uav_msgs/EnableMotors.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene/planning_scene.h>
@@ -9,6 +8,7 @@
 #include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
 
+#include <boost/optional.hpp>
 #include <vector>
 
 #include "hector_navigation_msgs/FollowTrajectoryAction.h"
